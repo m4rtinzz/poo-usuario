@@ -1,20 +1,45 @@
 import './App.css'
+import { useState } from 'react';
 import { Usuario } from './models/Usuario';
 
-function App()
-{
+function App() {
+  const [usuario] = useState(new Usuario('Tina', 26, '123456'));
+  const [senhaInput, setSenhaInput] = useState('');
+  const [mensagem, setMensagem] = useState('');
+  const [novaSenha, setNovaSenha] = useState('');
 
-  const u1 = new Usuario('João da Silva', 37);
-  const u2 = new Usuario('Maria Oliveira', 25);
-
-  u1.nome = 'João da Silva Teste erro'; // This line will cause an error because nome is private
+  const verificarSenha = () => {
+    const senhaCorreta = usuario.verificarSenha(senhaInput);
+    setMensagem(`Senha ${senhaCorreta ? 'correta' : 'incorreta'}!`);
+  };
+  const redefinirSenha = () => {
+    usuario.redefinirSenha(novaSenha);
+    setMensagem('Senha redefinida com sucesso!');
+    setNovaSenha('');
+  };
 
   return (
-    <>
-      <p>{u1.apresentar()}</p>
-      <p>{u2.apresentar()}</p>
-    </>
-  )
+    <div style={{ padding: '2rem' }}>
+      <h3>{usuario.apresentar()}</h3>
+      <input
+        type="password"
+        placeholder="Digite a senha"
+        value={senhaInput}
+        onChange={e => setSenhaInput(e.target.value)}
+      />
+      <button onClick={verificarSenha}>Verificar Senha</button>
+      <br /><br />
+      <input
+        type="password"
+        placeholder="Nova senha"
+        value={novaSenha}
+        onChange={e => setNovaSenha(e.target.value)}
+      />
+      <button onClick={redefinirSenha}>Redefinir Senha</button>
+      <br /><br />
+      <span>{mensagem}</span>
+    </div>
+  );
 }
 
-export default App
+export default App;
